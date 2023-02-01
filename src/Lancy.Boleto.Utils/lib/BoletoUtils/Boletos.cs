@@ -121,7 +121,6 @@ namespace BoletoUtils
             var tipoCodigo = IdentificarTipoCodigo(codigo);
 
             DateTime dataBoleto = new DateTime(1997, 10, 07, 20, 54, 59);
-            //DateTime dataBoleto = DateTime.SpecifyKind(data, DateTimeKind.Utc);
 
             var fatorData = "0";
 
@@ -200,7 +199,6 @@ namespace BoletoUtils
         public string CodigoParaLinha(string barCode, bool mascara = true)
         {
             var tipoBoleto = IdentificarTipoBoleto(barCode);
-
 
             string resultado = string.Empty;
 
@@ -357,6 +355,23 @@ namespace BoletoUtils
         }
 
         /// <summary>
+        /// Calcula e retorna Dígito Verificador
+        /// </summary>
+        /// <param name="codigo">Código de Barras</param>
+        /// <returns>Retorna Dígito Verificador</returns>
+        public string DigitoVerificadorCodigoDeBarras(string barras)
+        {
+            var tipoBoleto = IdentificarTipoBoleto(barras);
+
+            if (tipoBoleto == TipoBoletoEnum.Banco || tipoBoleto == TipoBoletoEnum.CartaoDeCredito)
+            {
+                return CalculaDVCodBarras(barras, 4, 11);
+            }
+
+            return CalculaDVCodBarras(barras, 3, 10);
+        }
+
+        /// <summary>
         /// Realiza o cálculo Módulo 10 do número inserido
         /// </summary>
         /// <param name="numero">numero</param>
@@ -396,7 +411,6 @@ namespace BoletoUtils
         /// <returns>Módulo</returns>
         public string CalculaMod11(string numero)
         {
-
             var reverse = numero.Reverse();
             var numeroReverso = string.Join("", reverse);
 
